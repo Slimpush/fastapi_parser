@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  redis:
+    image: redis:alpine
+    environment:
+      - TZ=Asia/Novosibirsk
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+    networks:
+      - my_network
+
+  parser:
+    build: .
+    depends_on:
+      - db
+      - redis
+    networks:
+      - my_network
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_EXPIRE=${REDIS_EXPIRE}
+    working_dir: /app/scr
+    command: python main.py
+
+  api:
+    build: .
+    depends_on:
+      - db
+      - redis
+    networks:
+      - my_network
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Asia/Novosibirsk
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_EXPIRE=${REDIS_EXPIRE}
+    working_dir: /app/scr
+    command: uvicorn api.spimex:app --host 0.0.0.0 --port 8000 
+
+networks:
+  my_network:
+
+volumes:
+  postgres_data:
