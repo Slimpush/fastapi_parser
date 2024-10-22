@@ -5,11 +5,14 @@ from pydantic import BaseModel, Field
 
 
 class TradingFilters(BaseModel):
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
     oil_id: Optional[str] = None
     delivery_type_id: Optional[str] = None
     delivery_basis_id: Optional[str] = None
+
+
+class TradingFiltersWithDates(TradingFilters):
+    start_date: date = None
+    end_date: date = None
 
 
 class TradingResultsSchema(BaseModel):

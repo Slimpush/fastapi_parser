@@ -9,6 +9,7 @@ from db.db_manager import get_session
 from schemas.schemas import (
     LastTradingResultsDates,
     TradingFilters,
+    TradingFiltersWithDates,
     TradingResultsSchema,
 )
 from sqlalchemy.future import select
@@ -39,7 +40,7 @@ async def fetch_trading_results(
 @router.get("/get_dynamics/", response_model=List[TradingResultsSchema])
 @cache(expire=reset_cache())
 async def get_dynamics(
-    filters: TradingFilters = Depends(),
+    filters: TradingFiltersWithDates = Depends(),
     session: AsyncSession = Depends(get_session)
 ) -> List[TradingResultsSchema]:
     return await fetch_trading_results(filters, session, use_dates=True)
