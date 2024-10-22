@@ -1,19 +1,19 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from .routers import router
 from .settings import settings
 from utils.cache import init_cache, reset_cache
 
 
-app = FastAPI()
-
-app.include_router(router)
-
-
-@app.on_event("startup")
-async def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await init_cache()
     if settings.redis_expire is None:
         settings.redis_expire = await reset_cache()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.include_router(router)
 
 if __name__ == "__main__":
     import uvicorn
