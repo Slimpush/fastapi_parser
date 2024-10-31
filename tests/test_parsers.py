@@ -51,7 +51,7 @@ async def test_fetch_page_html_success(mocker):
     mock_session = mocker.patch("aiohttp.ClientSession.get", return_value=mock_response)
     mock_session().__aenter__.return_value = mock_response
 
-    url = "https://example.com"
+    url = "https://test.com"
     result = await fetch_page_html(url)
 
     assert result == "<html><body>Test Content</body></html>"
@@ -63,7 +63,7 @@ async def test_fetch_page_html_client_error(mocker):
     mock_session = mocker.patch(
         "aiohttp.ClientSession.get", side_effect=aiohttp.ClientError("Request failed")
     )
-    url = "https://example.com"
+    url = "https://test.com"
 
     with pytest.raises(aiohttp.ClientError):
         await fetch_page_html(url)
@@ -87,7 +87,7 @@ async def test_extract_links_from_page_success(mocker):
     )
     mocker.patch("src.utils.validator.is_valid_year", return_value=True)
 
-    url = "https://example.com"
+    url = "https://test.com"
     links_data, has_invalid_date = await extract_links_from_page(url)
 
     expected_links = [

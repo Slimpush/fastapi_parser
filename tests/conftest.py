@@ -44,31 +44,31 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture
+@pytest.fixture(scope="function", autouse=True)
 async def get_test_session():
     async with AsyncSessionFactory() as session:
         yield session
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def mock_redis_connection(mocker):
     mock_redis = mocker.patch("src.utils.cache.Redis")
     mock_redis.from_url = mocker.AsyncMock()
     return mock_redis
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="function", autouse=True)
 def init_cache(mock_redis_connection):
     FastAPICache.init(RedisBackend(mock_redis_connection), prefix="test-cache")
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def client():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def sample_xls_content():
     data = {
         "B": ["ABCD123", "EFGH456", "IJKL789"],
@@ -85,6 +85,6 @@ def sample_xls_content():
     return buffer.getvalue()
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def sample_date():
     return "01.01.2024"
