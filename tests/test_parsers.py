@@ -1,5 +1,3 @@
-from unittest.mock import AsyncMock
-
 import aiohttp
 import pytest
 
@@ -42,9 +40,9 @@ async def test_parse_xls_data(mocker, sample_xls_content, sample_date):
 
 @pytest.mark.asyncio
 async def test_fetch_page_html_success(mocker):
-    mock_response = AsyncMock()
+    mock_response = mocker.AsyncMock()
     mock_response.status = 200
-    mock_response.text = AsyncMock(
+    mock_response.text = mocker.AsyncMock(
         return_value="<html><body>Test Content</body></html>"
     )
 
