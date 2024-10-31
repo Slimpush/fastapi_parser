@@ -45,11 +45,8 @@ class SPIMEXTradingResults(Base):
     date: Mapped[datetime] = mapped_column(Date)
 
     created_on: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=get_current_time
+        DateTime(timezone=True), default=get_current_time
     )
     updated_on: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=get_current_time,
-        onupdate=get_current_time
+        DateTime(timezone=True), default=get_current_time, onupdate=get_current_time
     )

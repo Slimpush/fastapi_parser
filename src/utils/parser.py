@@ -2,6 +2,7 @@ import asyncio
 import time
 
 import aiohttp
+
 from db.db_manager import create_tables, insert_data
 from parsers.excel_parser import parse_xls_data
 from parsers.url_collector import collect_all_trade_links

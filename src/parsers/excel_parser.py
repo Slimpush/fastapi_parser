@@ -33,18 +33,16 @@ def parse_xls_content(data: bytes, date: str) -> list[tuple]:
         try:
             parsed_data.append(
                 (
-                    row[0],                               # Товар
-                    row[1],                               # Наименование
-                    row[0][:4],                           # Продукт
-                    row[0][4:7],                          # Тип поставки
-                    row[2] if row[2] != "-" else None,    # Базис поставки
-                    row[0][-1],                           # Тип поставки
+                    row[0],  # Товар
+                    row[1],  # Наименование
+                    row[0][:4],  # Продукт
+                    row[0][4:7],  # Тип поставки
+                    row[2] if row[2] != "-" else None,  # Базис поставки
+                    row[0][-1],  # Тип поставки
                     int(row[3]) if row[3] != "-" else 0,  # Объём
                     int(row[4]) if row[4] != "-" else 0,  # Итоговая сумма
-                    (
-                        int(row[5]) if row[5] != "-" else 0
-                    ),                                    # Количество сделок
-                    date,                                 # Дата
+                    (int(row[5]) if row[5] != "-" else 0),  # Количество сделок
+                    date,  # Дата
                 )
             )
         except Exception as e:

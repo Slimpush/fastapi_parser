@@ -1,7 +1,8 @@
-from fastapi_cache import FastAPICache
-from redis.asyncio import Redis
 from datetime import datetime, timedelta
+
+from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from redis.asyncio import Redis
 
 
 async def get_redis_connection() -> Redis:
